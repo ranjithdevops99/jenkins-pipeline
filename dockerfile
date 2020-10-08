@@ -1,7 +1,9 @@
-FR0M tomcat
-MAINTAINER rboppana99@gmail.com
+FROM tomcat:8.0-alpine
 
-ADD AarnaDemoProject-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/
+LABEL maintainer="Ranjith"
+
+ADD  target/AarnaDemoProject-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/
+
+EXPOSE 8080
 
 CMD ["catalina.sh", "run"]
-
