@@ -1,0 +1,29 @@
+node{
+    
+   stage('Git clone'){
+     git credentialsId: 'githubcredentials', url: 'https://github.com/ranjithdevops99/jenkins-pipeline.git'
+    }
+   stage('maven build'){
+     def mvnHome = tool name: 'Maven_Home', type: 'maven'
+     sh "${mvnHome}/bin/mvn package"
+          }
+     stage('Build Docker image'){
+     sh label: '', script: 'sudo docker build -t ranjith867/aarnademoproject:${BUILD_NUMBER} .'
+      }	     
+
+    stage('Push Docker Image'){
+        withCredentials([string(credentialsId: 'DOCKER_HUB_CREDENTIALS', variable: 'DOCKER_HUB_CREDENTIALS')]) {
+          sh "sudo docker login -u ranjith867 -p ${DOCKER_HUB_CREDENTIALS}"
+        }
+        sh 'sudo docker push ranjith867/aarnademoproject:${BUILD_NUMBER}'
+     }
+
+    //stage("Deploy To Kuberates Cluster"){
+      // kubernetesDeploy(
+        // configs: 'aarnaproject.yaml',
+         //kubeconfigId: 'Kuberentes_cluster_config',
+         //enableConfigSubstitution: true
+        //)
+ } 
+
+
